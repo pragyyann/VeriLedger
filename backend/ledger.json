@@ -1,0 +1,57 @@
+[ {
+  "id" : "74187ffa-4f96-446f-a3cf-830a741562b4",
+  "timestamp" : [ 2026, 4, 12, 0, 35, 20, 30170300 ],
+  "amount" : 150000,
+  "type" : "INCOME",
+  "category" : "Series A Funding",
+  "previousHash" : "GENESIS",
+  "hash" : "b830d6f35d7ced4393b04001287d54940689852266162541e45abbda9282842e"
+}, {
+  "id" : "346a2532-a695-4435-a38e-9517367e7f01",
+  "timestamp" : [ 2026, 4, 12, 0, 35, 22, 69697800 ],
+  "amount" : 12500,
+  "type" : "EXPENSE",
+  "category" : "Infrastructure Setup",
+  "previousHash" : "b830d6f35d7ced4393b04001287d54940689852266162541e45abbda9282842e",
+  "hash" : "2c9d9833ccd6723187b5be535f28ecb7a7f35b1831414e44e03cd15e4532c5e3"
+}, {
+  "id" : "02b5750e-aab7-487b-b9c1-52aa67347b3e",
+  "timestamp" : [ 2026, 4, 12, 0, 35, 24, 79020200 ],
+  "amount" : 5000,
+  "type" : "EXPENSE",
+  "category" : "Legal Fees",
+  "previousHash" : "2c9d9833ccd6723187b5be535f28ecb7a7f35b1831414e44e03cd15e4532c5e3",
+  "hash" : "d373fba410d334609cb589966799369bbfa6973b611aed75266bb5a93ff273d3"
+}, {
+  "id" : "25b30ef7-f1ea-439e-b93d-094fc3157a02",
+  "timestamp" : [ 2026, 4, 12, 0, 35, 26, 103477800 ],
+  "amount" : 24000,
+  "type" : "INCOME",
+  "category" : "Initial Sales ARR",
+  "previousHash" : "d373fba410d334609cb589966799369bbfa6973b611aed75266bb5a93ff273d3",
+  "hash" : "4e15277aae2f72572abdb7f2759839ce79f8d80fdaf6b280af6872aa4283344c"
+}, {
+  "id" : "3b48e1f2-0030-47c5-869b-e8d3b84b8685",
+  "timestamp" : [ 2026, 4, 12, 0, 35, 28, 128232800 ],
+  "amount" : 3200,
+  "type" : "EXPENSE",
+  "category" : "AWS Hosting",
+  "previousHash" : "4e15277aae2f72572abdb7f2759839ce79f8d80fdaf6b280af6872aa4283344c",
+  "hash" : "142859c05d6d70f45f008f6c7e103ff1eef7cdaee56437c32c3c01f1eb50df20"
+}, {
+  "id" : "9b4ea743-1084-4135-9591-cdeb782817a7",
+  "timestamp" : [ 2026, 4, 12, 0, 35, 30, 152669700 ],
+  "amount" : 8500,
+  "type" : "EXPENSE",
+  "category" : "Payroll",
+  "previousHash" : "142859c05d6d70f45f008f6c7e103ff1eef7cdaee56437c32c3c01f1eb50df20",
+  "hash" : "49eb5fa31b26bc98b34766ae1f8a70a9efc462a6b0560d03de39b58ff326ea34"
+}, {
+  "id" : "017c5874-844d-446a-8f39-4dbc79f725ed",
+  "timestamp" : [ 2026, 4, 12, 0, 35, 32, 181464800 ],
+  "amount" : 18000,
+  "type" : "INCOME",
+  "category" : "Q1 Partnership Revenue",
+  "previousHash" : "49eb5fa31b26bc98b34766ae1f8a70a9efc462a6b0560d03de39b58ff326ea34",
+  "hash" : "df9754eb23a17226381364f24706af6c2d921543db2fe414778d344c04c7a14c"
+} ]

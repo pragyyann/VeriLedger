@@ -1,0 +1,61 @@
+[ {
+  "id" : "3035c925-4776-44b1-acba-31b7ca927412",
+  "timestamp" : [ 2026, 4, 12, 1, 48, 19, 853698600 ],
+  "amount" : 100000,
+  "type" : "INCOME",
+  "category" : "Salary",
+  "previousHash" : "GENESIS",
+  "hash" : "11158aedc47518ac4edcf98403fa4b66ba14abe4b76c1ed7cffd633f8a719010",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "37c835ee-78e4-464f-996d-22fd75810292",
+  "timestamp" : [ 2026, 4, 12, 1, 48, 55, 761565900 ],
+  "amount" : 10000,
+  "type" : "EXPENSE",
+  "category" : "Rent ",
+  "previousHash" : "11158aedc47518ac4edcf98403fa4b66ba14abe4b76c1ed7cffd633f8a719010",
+  "hash" : "6fb57ac44fe723f8956a1892ce7477a00bc0fd311b854a3d94122f5d247a793d",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "9a852376-3415-45ce-9708-25cb14c922bd",
+  "timestamp" : [ 2026, 4, 12, 1, 49, 15, 511235400 ],
+  "amount" : 3000,
+  "type" : "EXPENSE",
+  "category" : "Grocery",
+  "previousHash" : "6fb57ac44fe723f8956a1892ce7477a00bc0fd311b854a3d94122f5d247a793d",
+  "hash" : "181d6ec6995b61bfb647acc8edeb69b3123c33a016cb6d51f177d9d17833a1fd",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "edec9296-97f2-4241-8238-2de656832fe8",
+  "timestamp" : [ 2026, 4, 12, 1, 50, 7, 620183700 ],
+  "amount" : 50000,
+  "type" : "INCOME",
+  "category" : "Q1_Revenue",
+  "previousHash" : "181d6ec6995b61bfb647acc8edeb69b3123c33a016cb6d51f177d9d17833a1fd",
+  "hash" : "35ad5f749fb63adde4edba111ebff8c4af7663d320cbe7f90546746f9be24182",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "482c7628-5581-496a-b396-9b18c3562bb4",
+  "timestamp" : [ 2026, 4, 12, 2, 11, 17, 200615800 ],
+  "amount" : 1000,
+  "type" : "EXPENSE",
+  "category" : "Subscriptions",
+  "previousHash" : "35ad5f749fb63adde4edba111ebff8c4af7663d320cbe7f90546746f9be24182",
+  "hash" : "ed7f343c6f8b70b68cd2fb46c5bd375edf3a7338895873ee62d80d671b743061",
+  "walletAddress" : "0x955f8ba23400beb09b50b5b422839f8ceefffc73",
+  "signature" : "0xf74a7c9f2a4e2e984210030af35b0b5ad53c4e1bd1c15a8d270c702f755020244b17e45dd48e9ebab05b2fbf7ee9d077d07383e5f4556ff35db2c920856b09a91c"
+}, {
+  "id" : "8e069e08-7ffd-4898-8e5f-7fa431f445b5",
+  "timestamp" : [ 2026, 4, 12, 2, 12, 27, 578884000 ],
+  "amount" : 2000,
+  "type" : "INCOME",
+  "category" : "Q2_Revenue",
+  "previousHash" : "ed7f343c6f8b70b68cd2fb46c5bd375edf3a7338895873ee62d80d671b743061",
+  "hash" : "27419f491f673b111c9abfe6f34693c87461a043dac70502565fe77293612086",
+  "walletAddress" : "0x955f8ba23400beb09b50b5b422839f8ceefffc73",
+  "signature" : "0x356b98a24fe442f9517b3fc0152be2e874343076cd8ef2fa1064f7f8b72ddba45fb855713c6893679a880895154ba09ef6a5727b076459b7d02e029f0ef18cb11c"
+} ]
