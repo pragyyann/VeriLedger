@@ -124,9 +124,11 @@ public class Ledger {
             
             Transaction target = transactions.get(transactions.size() - 1);
             if (target.getCategory().startsWith("HACKED_")) {
-                // To repair the hack, we can delete the hacked row for demonstration
-                log.info("Repairing ledger by deleting hacked transaction: " + target.getId());
-                repository.delete(target);
+                // To repair the hack, we reverse the rogue mutation
+                log.info("Repairing ledger by restoring hacked transaction: " + target.getId());
+                target.setAmount(target.getAmount().subtract(BigDecimal.valueOf(999.00)));
+                target.setCategory(target.getCategory().substring(7)); // Removes "HACKED_"
+                repository.save(target);
             }
         } finally {
             lock.writeLock().unlock();
