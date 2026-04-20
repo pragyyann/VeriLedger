@@ -148,4 +148,14 @@
   "hash" : "44cc8f7abe7c8faf732c264f7b54a470bba9d55cd161b8931d3f67f17ed26fde",
   "walletAddress" : null,
   "signature" : null
+}, {
+  "id" : "7b3cb04f-e698-420c-a9b0-b7859a03fd0f",
+  "timestamp" : [ 2026, 4, 20, 15, 59, 48, 907642800 ],
+  "amount" : 100,
+  "type" : "INCOME",
+  "category" : "Freelance",
+  "previousHash" : "44cc8f7abe7c8faf732c264f7b54a470bba9d55cd161b8931d3f67f17ed26fde",
+  "hash" : "041a44071f643c5b6db1a62e12e0c7b74822679b90e886e30dfaa81b34718adf",
+  "walletAddress" : "0x955f8ba23400beb09b50b5b422839f8ceefffc73",
+  "signature" : "0x2d2828538c66ea1c58c3d6d3876c2df3f1cab50ecb97c92427620195dc2686206824d4cef16347d216d2ecb3047e64bd6d5c0ffdfbe039dc4e3b3484d5bd22581b"
 } ]
