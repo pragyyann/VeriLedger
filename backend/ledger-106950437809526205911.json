@@ -58,4 +58,94 @@
   "hash" : "27419f491f673b111c9abfe6f34693c87461a043dac70502565fe77293612086",
   "walletAddress" : "0x955f8ba23400beb09b50b5b422839f8ceefffc73",
   "signature" : "0x356b98a24fe442f9517b3fc0152be2e874343076cd8ef2fa1064f7f8b72ddba45fb855713c6893679a880895154ba09ef6a5727b076459b7d02e029f0ef18cb11c"
+}, {
+  "id" : "be6aa00c-3927-43cc-8183-e0f938544681",
+  "timestamp" : [ 2026, 4, 12, 4, 11, 47, 183550600 ],
+  "amount" : 1500,
+  "type" : "EXPENSE",
+  "category" : "Utility",
+  "previousHash" : "27419f491f673b111c9abfe6f34693c87461a043dac70502565fe77293612086",
+  "hash" : "a6f8472be256952245f841fffa706d8f0ee4737c54689902cf41a42bda3e57f5",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "adc51155-8c1e-4f71-b806-f7eef41b8fda",
+  "timestamp" : [ 2026, 4, 12, 4, 12, 41, 31995100 ],
+  "amount" : 1500,
+  "type" : "EXPENSE",
+  "category" : "Utilities",
+  "previousHash" : "a6f8472be256952245f841fffa706d8f0ee4737c54689902cf41a42bda3e57f5",
+  "hash" : "1e4c2182a5b825aa8ba9b3905e2803442634201a744d46f53259a926854ff567",
+  "walletAddress" : "0x955f8ba23400beb09b50b5b422839f8ceefffc73",
+  "signature" : "0x70180f956ba2cbac49cd856614e4d07f07c07f1019c5071127a0eeef2c4e75fe26485d5d0f94bf25db591d8ec80bfd8fe2304b8dea8c8f1d2f86a16996599a3f1c"
+}, {
+  "id" : "f4fbe428-0b15-457f-9e0e-895e38aeca2b",
+  "timestamp" : [ 2026, 4, 12, 11, 43, 18, 68659200 ],
+  "amount" : 2500,
+  "type" : "EXPENSE",
+  "category" : "Tax",
+  "previousHash" : "1e4c2182a5b825aa8ba9b3905e2803442634201a744d46f53259a926854ff567",
+  "hash" : "c5e0442c616dc0a93613a58948d6c7c603d167a137b21990de4bbc72722e3b07",
+  "walletAddress" : "0x955f8ba23400beb09b50b5b422839f8ceefffc73",
+  "signature" : "0xbf78359b03a70f218e0ddf0b7e9c965a1ee545b4a3620b4f1cc9ea1392c52cd24792c5a5535cdc244224cc9aee9775b5e32dc06b118dcd25ae1e6cbf35b9d2d21c"
+}, {
+  "id" : "7f412442-b324-4038-a675-0f8590e66f56",
+  "timestamp" : [ 2026, 4, 19, 0, 54, 39, 335152700 ],
+  "amount" : 8448959,
+  "type" : "INCOME",
+  "category" : "Salary",
+  "previousHash" : "c5e0442c616dc0a93613a58948d6c7c603d167a137b21990de4bbc72722e3b07",
+  "hash" : "e314ccfcb1cfbcfe41f562c41fa2702434fb4611bc27116024b89c7469731945",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "649dfff2-d2fe-428e-a98e-dcd7234d288d",
+  "timestamp" : [ 2026, 4, 19, 1, 21, 17, 121856300 ],
+  "amount" : 2406.74,
+  "type" : "INCOME",
+  "category" : "Income",
+  "previousHash" : "e314ccfcb1cfbcfe41f562c41fa2702434fb4611bc27116024b89c7469731945",
+  "hash" : "6db2493477a767fc334b440a4a4a7d5e42f92ba0e11a2f73407c56aceb51f02c",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "9cbba843-ea8d-48c2-a95c-e5b10a3002aa",
+  "timestamp" : [ 2026, 4, 19, 1, 21, 17, 144209200 ],
+  "amount" : 101.24,
+  "type" : "EXPENSE",
+  "category" : "Food & Dining",
+  "previousHash" : "6db2493477a767fc334b440a4a4a7d5e42f92ba0e11a2f73407c56aceb51f02c",
+  "hash" : "4e6763a004c2ef5e49ef423ce0b19f141d3498edd161fc7884f18c6c550207f3",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "f37b5399-90ad-4b1d-8f51-18c0c98aec2c",
+  "timestamp" : [ 2026, 4, 19, 1, 21, 17, 149596400 ],
+  "amount" : 42.25,
+  "type" : "EXPENSE",
+  "category" : "Food & Dining",
+  "previousHash" : "4e6763a004c2ef5e49ef423ce0b19f141d3498edd161fc7884f18c6c550207f3",
+  "hash" : "f2d5e169bc5103c4db55176982abb1c780aba253415d0e688ac2083608a4c947",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "7aa42dfe-d2ce-4cf7-bf6d-2e75b4d87cd4",
+  "timestamp" : [ 2026, 4, 19, 1, 21, 17, 153925100 ],
+  "amount" : 1897.29,
+  "type" : "INCOME",
+  "category" : "Income",
+  "previousHash" : "f2d5e169bc5103c4db55176982abb1c780aba253415d0e688ac2083608a4c947",
+  "hash" : "fc7c9c95caf3a37215d8978ed04fd67e6d3cef9a1a560d824e4714be52dfc67f",
+  "walletAddress" : null,
+  "signature" : null
+}, {
+  "id" : "cd78e217-77af-4b18-b0b6-d83214e0077c",
+  "timestamp" : [ 2026, 4, 19, 1, 21, 17, 157583100 ],
+  "amount" : 121.13,
+  "type" : "EXPENSE",
+  "category" : "Shopping",
+  "previousHash" : "fc7c9c95caf3a37215d8978ed04fd67e6d3cef9a1a560d824e4714be52dfc67f",
+  "hash" : "44cc8f7abe7c8faf732c264f7b54a470bba9d55cd161b8931d3f67f17ed26fde",
+  "walletAddress" : null,
+  "signature" : null
 } ]

@@ -9,12 +9,8 @@ import Dashboard from './components/Dashboard';
 import TransactionForm from './components/TransactionForm';
 import LedgerTable from './components/LedgerTable';
 import AuditStatus from './components/AuditStatus';
-import AnalyticsCharts from './components/AnalyticsCharts';
 import BlockchainStatus from './components/BlockchainStatus';
-import SystemGuarantees from './components/SystemGuarantees';
-import BalanceBreakdown from './components/BalanceBreakdown';
 import ExportPanel from './components/ExportPanel';
-import DeveloperMode from './components/DeveloperMode';
 import { BackgroundPaths } from './components/ui/background-paths';
 import './index.css';
 
@@ -85,13 +81,6 @@ function AppContent({ refreshTrigger, setRefreshTrigger, handleTransactionAdded,
                     onAnalyticsLoaded={setAnalyticsData}
                     onTransactionAdded={handleTransactionAdded}
                   />
-                  <BalanceBreakdown analytics={analyticsData} />
-                  <SystemGuarantees />
-                  <div className="grid grid-cols-1 gap-8">
-                    <AnalyticsCharts key={`charts-${refreshTrigger}`} />
-                  </div>
-                  <BlockchainStatus />
-                  <DeveloperMode />
                 </div>
               </ProtectedRoute>
             } />
