@@ -25,7 +25,7 @@ export default function LoginPage() {
             const userInfo = await userInfoRes.json();
 
             // Send to our backend which will verify and issue JWT
-            const backendRes = await fetch('http://localhost:8080/api/auth/google-access', {
+            const backendRes = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/google-access`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -59,7 +59,7 @@ export default function LoginPage() {
         setGuestLoading(true);
         setError(null);
         try {
-            const res = await fetch('http://localhost:8080/api/auth/guest', { method: 'POST' });
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/guest`, { method: 'POST' });
             const data = await res.json();
             localStorage.setItem('veriledger_token', data.token);
             login({ name: data.name, email: data.email, picture: '' });
