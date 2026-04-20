@@ -50,7 +50,7 @@ function AppContent({ refreshTrigger, setRefreshTrigger, handleTransactionAdded,
 
   return (
       <div className="relative min-h-screen bg-black overflow-hidden flex flex-col">
-        {!isPublicRoute && (
+        {location.pathname !== '/' && location.pathname !== '/demo' && (
             <div className="fixed inset-0 z-0 bg-gradient-to-br from-[#020617] via-[#0f172a] to-[#020617]">
                 <BackgroundPaths />
             </div>
