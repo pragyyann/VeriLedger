@@ -46,6 +46,29 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
   };
 
   const netBalance = analytics?.netBalance || 0;
+  const totalIncome = analytics?.totalIncome || 0;
+  const totalExpense = analytics?.totalExpense || 0;
+  
+  const isEmpty = totalIncome === 0 && totalExpense === 0;
+
+  // Real Cash Flow Timeline
+  const trendData = (!isEmpty && analytics?.cashFlowTimeline?.length > 0)
+    ? analytics.cashFlowTimeline.map((item: any) => ({
+        name: item.date,
+        value: item.income - item.expense
+      }))
+    : [{ value: 0 }, { value: 0 }, { value: 0 }, { value: 0 }];
+
+  // Real Asset Allocation based on Expenses (or income if you want)
+  const assetData = (!isEmpty && analytics?.expenseByCategory && Object.keys(analytics.expenseByCategory).length > 0)
+    ? Object.entries(analytics.expenseByCategory).map(([key, value]) => ({
+        name: key,
+        value: Number(value)
+      }))
+    : [{ name: 'No Data', value: 100 }];
+
+  const cashFlow = (totalIncome - totalExpense) * mult;
+  const savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome) * 100 : 0;
   
   return (
     <motion.div
@@ -54,7 +77,6 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
       variants={containerVariants}
       className="w-full flex-1 flex flex-col gap-6 font-sans relative z-10"
     >
-
 
       {/* Row 1: Hero Metrics & Audit Panel */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 shrink-0 z-20">
@@ -68,18 +90,19 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
                 <span className="text-gray-500 text-3xl font-medium">$</span>
                 {netBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </h1>
-              <div className="mt-4 flex items-center gap-3">
-                <span className="bg-green-500/10 text-green-400 px-2.5 py-1 rounded-full text-xs font-semibold border border-green-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
-                  +12.4% this month
-                </span>
-                <span className="text-gray-600 text-xs font-medium">vs last month</span>
-              </div>
+              {!isEmpty && (
+                <div className="mt-4 flex items-center gap-3">
+                  <span className={`${netBalance >= 0 ? 'bg-green-500/10 text-green-400 border-green-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-rose-500/10 text-rose-400 border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.1)]'} px-2.5 py-1 rounded-full text-xs font-semibold border`}>
+                    Active ledger tracking
+                  </span>
+                </div>
+              )}
             </div>
             {/* Sparkline */}
             <div className="h-[72px] w-full mt-6 -mx-2 relative z-0">
                 <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={mockTrendData}>
-                        <Line type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={3} dot={false} isAnimationActive={true} />
+                    <LineChart data={trendData}>
+                        <Line type="monotone" dataKey="value" stroke={isEmpty ? "#374151" : "#6366f1"} strokeWidth={3} dot={false} isAnimationActive={true} />
                     </LineChart>
                 </ResponsiveContainer>
                 {/* Fade out bottom of chart */}
@@ -107,11 +130,13 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
             <div className="mt-6 space-y-3 relative z-10">
                 <div className="flex justify-between items-center text-sm border-b border-gray-800/50 pb-2">
                     <span className="text-gray-500 text-xs font-medium uppercase tracking-wider">Last audit</span>
-                    <span className="text-gray-300 font-mono text-xs">10 sec ago</span>
+                    <span className="text-gray-300 font-mono text-xs">Live Database</span>
                 </div>
                 <div className="flex justify-between items-center text-sm border-b border-gray-800/50 pb-2">
                     <span className="text-gray-500 text-xs font-medium uppercase tracking-wider">Hash Integrity</span>
-                    <span className="text-green-400 font-mono text-xs bg-green-500/10 px-1.5 py-0.5 rounded">100%</span>
+                    <span className={isEmpty ? "text-gray-400 font-mono text-xs bg-gray-500/10 px-1.5 py-0.5 rounded" : "text-green-400 font-mono text-xs bg-green-500/10 px-1.5 py-0.5 rounded"}>
+                        {isEmpty ? 'Awaiting Data' : '100%'}
+                    </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-500 text-xs font-medium uppercase tracking-wider">Blockchain Anchor</span>
@@ -144,10 +169,10 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
             </div>
             
             {[
-                { title: 'Spending', value: `$${((analytics?.totalExpense || 0) * mult).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, progress: 65, color: 'bg-rose-500', bg: 'bg-rose-500/20' },
-                { title: 'Savings Rate', value: '38.4%', progress: 38, color: 'bg-blue-500', bg: 'bg-blue-500/20' },
-                { title: 'Cash Flow', value: `${mult >= 1 ? '+' : ''}$${(12400 * mult).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, progress: 85, color: 'bg-emerald-500', bg: 'bg-emerald-500/20' },
-                { title: 'Budget Health', value: '92/100', progress: 92, color: 'bg-indigo-500', bg: 'bg-indigo-500/20' }
+                { title: 'Spending', value: `$${(totalExpense * mult).toLocaleString(undefined, { maximumFractionDigits: 0 })}`, progress: isEmpty ? 0 : Math.min(100, (totalExpense/(totalIncome || 1))*100), color: 'bg-rose-500', bg: 'bg-rose-500/20' },
+                { title: 'Savings Rate', value: `${savingsRate.toFixed(1)}%`, progress: isEmpty ? 0 : Math.max(0, Math.min(100, savingsRate)), color: 'bg-blue-500', bg: 'bg-blue-500/20' },
+                { title: 'Cash Flow', value: `${cashFlow >= 0 ? '+' : ''}$${cashFlow.toLocaleString(undefined, { maximumFractionDigits: 0 })}`, progress: isEmpty ? 0 : 85, color: 'bg-emerald-500', bg: 'bg-emerald-500/20' },
+                { title: 'Budget Health', value: isEmpty ? 'N/A' : (savingsRate > 20 ? '92/100' : '65/100'), progress: isEmpty ? 0 : (savingsRate > 20 ? 92 : 65), color: 'bg-indigo-500', bg: 'bg-indigo-500/20' }
             ].map((stat, i) => (
                 <div key={i} className="bg-[#111827]/60 backdrop-blur-md border border-gray-800/80 hover:border-gray-700 rounded-2xl p-5 flex flex-col justify-center transition-colors group relative overflow-hidden">
                     <div className="absolute right-0 top-0 w-24 h-24 bg-white/[0.02] rounded-full -translate-y-1/2 translate-x-1/3 group-hover:scale-110 transition-transform pointer-events-none" />
@@ -171,13 +196,13 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
                 <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none" />
                 <h3 className="text-gray-200 text-sm font-medium mb-1 z-10 flex justify-between items-center">
                     Asset Allocation
-                    <span className="text-gray-500 text-xs cursor-pointer hover:text-white transition-colors">Details &rarr;</span>
+                    {!isEmpty && <span className="text-gray-500 text-xs cursor-pointer hover:text-white transition-colors">Details &rarr;</span>}
                 </h3>
                 <div className="flex-1 flex items-center justify-center relative z-10 mt-2 mb-4">
                     <ResponsiveContainer width="100%" height={160}>
                         <PieChart>
                             <Pie
-                                data={mockAssetData}
+                                data={assetData}
                                 cx="50%"
                                 cy="50%"
                                 innerRadius={50}
@@ -186,30 +211,30 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
                                 dataKey="value"
                                 stroke="none"
                             >
-                                {mockAssetData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} className="hover:opacity-80 transition-opacity" />
+                                {assetData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={isEmpty ? "#374151" : COLORS[index % COLORS.length]} className="hover:opacity-80 transition-opacity" />
                                 ))}
                             </Pie>
                         </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-2">
-                        <span className="text-white font-bold text-xl tracking-tight">100%</span>
-                        <span className="text-gray-500 text-[10px] uppercase font-medium">Mapped</span>
+                        <span className="text-white font-bold text-xl tracking-tight">{isEmpty ? '0%' : '100%'}</span>
+                        <span className="text-gray-500 text-[10px] uppercase font-medium">{isEmpty ? 'Empty' : 'Mapped'}</span>
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-y-3 gap-x-2 mt-auto z-10">
-                    {mockAssetData.map((item, i) => (
+                    {!isEmpty && assetData.map((item, i) => (
                         <div key={i} className="flex items-center gap-2 text-[11px] font-medium tracking-wide">
-                            <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: COLORS[i] }} />
-                            <span className="text-gray-400 flex-1">{item.name}</span>
-                            <span className="text-gray-200">{item.value}%</span>
+                            <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+                            <span className="text-gray-400 flex-1 truncate" title={item.name}>{item.name}</span>
+                            <span className="text-gray-200">{Math.round((item.value / totalExpense) * 100)}%</span>
                         </div>
                     ))}
                 </div>
             </div>
 
             <AnimatePresence>
-                {showAIInsight && (
+                {!isEmpty && showAIInsight && (
                     <motion.div 
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
@@ -227,28 +252,25 @@ export const FinancialDashboard: React.FC<FinancialDashboardProps> = ({
                         {!showSubscriptions ? (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                                 <p className="text-gray-300 text-sm leading-relaxed relative z-10">
-                                    Your spending dropped <span className="text-emerald-400 font-semibold inline-flex px-1 bg-emerald-500/10 rounded tracking-tight">14%</span> this month. 
-                                    You can save <span className="text-white font-semibold tracking-tight">$8,200</span> by consolidating active inactive subscriptions.
+                                    Your savings rate is <span className="text-emerald-400 font-semibold inline-flex px-1 bg-emerald-500/10 rounded tracking-tight">{savingsRate.toFixed(1)}%</span> this month. 
+                                    You have spent <span className="text-white font-semibold tracking-tight">${totalExpense.toLocaleString()}</span>. Keep it up!
                                 </p>
                                 <div className="mt-4 flex gap-2 relative z-10">
-                                    <button onClick={() => setShowSubscriptions(true)} className="text-[11px] bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-md font-medium transition-colors shadow-sm">Review Subscriptions</button>
+                                    <button onClick={() => setShowSubscriptions(true)} className="text-[11px] bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-md font-medium transition-colors shadow-sm">Review Expenses</button>
                                     <button onClick={() => setShowAIInsight(false)} className="text-[11px] bg-[#111827] text-gray-400 hover:text-white px-3 py-1.5 rounded-md font-medium transition-colors border border-gray-700">Dismiss</button>
                                 </div>
                             </motion.div>
                         ) : (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative z-10 mt-2">
                                 <div className="space-y-2 mb-4">
-                                    <div className="flex justify-between items-center bg-gray-900/50 p-2.5 rounded border border-gray-800 hover:border-gray-700 transition-colors cursor-pointer">
-                                        <span className="text-xs text-gray-300 font-medium">Netflix Ultra</span>
-                                        <span className="text-xs text-rose-400 font-mono">$22.99</span>
-                                    </div>
-                                    <div className="flex justify-between items-center bg-gray-900/50 p-2.5 rounded border border-gray-800 hover:border-gray-700 transition-colors cursor-pointer">
-                                        <span className="text-xs text-gray-300 font-medium">Adobe Creative Cloud</span>
-                                        <span className="text-xs text-rose-400 font-mono">$54.99</span>
-                                    </div>
+                                     {assetData.slice(0, 2).map((item, i) => (
+                                        <div key={i} className="flex justify-between items-center bg-gray-900/50 p-2.5 rounded border border-gray-800 hover:border-gray-700 transition-colors cursor-pointer">
+                                            <span className="text-xs text-gray-300 font-medium">{item.name}</span>
+                                            <span className="text-xs text-rose-400 font-mono">${item.value.toLocaleString()}</span>
+                                        </div>
+                                     ))}
                                 </div>
                                 <div className="flex gap-2">
-                                    <button onClick={() => setShowAIInsight(false)} className="text-[11px] flex-1 bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-md font-medium transition-colors">Cancel Selected</button>
                                     <button onClick={() => setShowSubscriptions(false)} className="text-[11px] flex-1 bg-[#111827] text-gray-400 hover:text-white px-3 py-1.5 rounded-md font-medium transition-colors border border-gray-700">Back</button>
                                 </div>
                             </motion.div>
