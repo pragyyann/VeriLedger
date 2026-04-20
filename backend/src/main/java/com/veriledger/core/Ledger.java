@@ -1,21 +1,13 @@
 package com.veriledger.core;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.veriledger.model.Transaction;
 import com.veriledger.model.TransactionType;
+import com.veriledger.repository.TransactionRepository;
 import com.veriledger.util.HashUtil;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -24,31 +16,20 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Slf4j
 public class Ledger {
 
-    private final List<Transaction> transactions = new ArrayList<>();
+    private final String userId;
+    private final TransactionRepository repository;
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
-    private final String ledgerFilePath;
-    private final ObjectMapper mapper;
 
-    public Ledger(String ledgerFilePath) {
-        this.ledgerFilePath = ledgerFilePath;
-        this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JavaTimeModule());
-    }
-
-    @PostConstruct
-    public void init() {
-        loadLedgerFromFile();
-    }
-
-    @PreDestroy
-    public void destroy() {
-        saveLedgerToFile();
+    public Ledger(String userId, TransactionRepository repository) {
+        this.userId = userId;
+        this.repository = repository;
     }
 
     public Transaction addTransaction(BigDecimal amount, TransactionType type, String category,
                                       String walletAddress, String signature) {
         lock.writeLock().lock();
         try {
+            List<Transaction> transactions = getTransactions();
             String previousHash = transactions.isEmpty() ? "GENESIS" : transactions.get(transactions.size() - 1).getHash();
             UUID id = UUID.randomUUID();
             LocalDateTime timestamp = LocalDateTime.now();
@@ -58,6 +39,7 @@ public class Ledger {
 
             Transaction tx = Transaction.builder()
                     .id(id)
+                    .userId(userId)
                     .timestamp(timestamp)
                     .amount(amount)
                     .type(type)
@@ -68,91 +50,67 @@ public class Ledger {
                     .signature(signature)
                     .build();
 
-            transactions.add(tx);
-            saveLedgerToFile();
-            return tx;
+            return repository.save(tx);
         } finally {
             lock.writeLock().unlock();
         }
     }
 
     public List<Transaction> getTransactions() {
-        lock.readLock().lock();
-        try {
-            return Collections.unmodifiableList(new ArrayList<>(transactions));
-        } finally {
-            lock.readLock().unlock();
-        }
+        return repository.findByUserIdOrderByTimestampAsc(userId);
     }
 
     public BigDecimal replayBalance() {
-        lock.readLock().lock();
-        try {
-            BigDecimal balance = BigDecimal.ZERO;
-            for (Transaction tx : transactions) {
-                if (tx.getType() == TransactionType.INCOME) {
-                    balance = balance.add(tx.getAmount());
-                } else if (tx.getType() == TransactionType.EXPENSE) {
-                    balance = balance.subtract(tx.getAmount());
-                }
+        List<Transaction> transactions = getTransactions();
+        BigDecimal balance = BigDecimal.ZERO;
+        for (Transaction tx : transactions) {
+            if (tx.getType() == TransactionType.INCOME) {
+                balance = balance.add(tx.getAmount());
+            } else if (tx.getType() == TransactionType.EXPENSE) {
+                balance = balance.subtract(tx.getAmount());
             }
-            return balance;
-        } finally {
-            lock.readLock().unlock();
         }
+        return balance;
     }
 
     public String computeCumulativeLedgerHash() {
-        lock.readLock().lock();
-        try {
-            if (transactions.isEmpty()) return "GENESIS";
-            return transactions.get(transactions.size() - 1).getHash();
-        } finally {
-            lock.readLock().unlock();
-        }
+        List<Transaction> transactions = getTransactions();
+        if (transactions.isEmpty()) return "GENESIS";
+        return transactions.get(transactions.size() - 1).getHash();
     }
 
-    /**
-     * Recalculates the hash from the actual data of the last transaction,
-     * ignoring the stored 'hash' field. This is used to detect tampering
-     * in real-time comparison with the blockchain.
-     */
     public String calculateActualCurrentHash() {
-        lock.readLock().lock();
-        try {
-            if (transactions.isEmpty()) return "GENESIS";
-            Transaction lastTx = transactions.get(transactions.size() - 1);
-            
-            String rawData = lastTx.getId().toString() + 
-                             lastTx.getTimestamp().toString() + 
-                             lastTx.getAmount().toString() + 
-                             lastTx.getType().name() + 
-                             lastTx.getCategory() + 
-                             lastTx.getPreviousHash();
-                             
-            return HashUtil.calculateHash(rawData);
-        } finally {
-            lock.readLock().unlock();
-        }
+        List<Transaction> transactions = getTransactions();
+        if (transactions.isEmpty()) return "GENESIS";
+        Transaction lastTx = transactions.get(transactions.size() - 1);
+        
+        String rawData = lastTx.getId().toString() + 
+                         lastTx.getTimestamp().toString() + 
+                         lastTx.getAmount().toString() + 
+                         lastTx.getType().name() + 
+                         lastTx.getCategory() + 
+                         lastTx.getPreviousHash();
+                         
+        return HashUtil.calculateHash(rawData);
     }
 
     public boolean tamperLedger() {
         lock.writeLock().lock();
         try {
+            List<Transaction> transactions = getTransactions();
             if (transactions.isEmpty()) return false;
-            Transaction target = transactions.remove(transactions.size() - 1);
-            // Cryptographically flawed identical duplication
-            Transaction tampered = Transaction.builder()
-                    .id(target.getId())
-                    .timestamp(target.getTimestamp())
-                    .amount(target.getAmount().add(BigDecimal.valueOf(999.00))) // Hack the amount!
-                    .type(target.getType())
-                    .category("HACKED_" + target.getCategory()) // Obvious hack tag
-                    .previousHash(target.getPreviousHash())
-                    .hash(target.getHash()) // Keeping original hash forces Audit mismatch!
-                    .build();
-            transactions.add(tampered);
-            return true; // We purposefully DO NOT saveToFile() so it remains a memory-only hack
+            
+            Transaction target = transactions.get(transactions.size() - 1);
+            
+            // In a real DB, tampering means performing a rogue UPDATE
+            // that bypasses standard hashing logic.
+            target.setAmount(target.getAmount().add(BigDecimal.valueOf(999.00)));
+            target.setCategory("HACKED_" + target.getCategory());
+            
+            // Save the tampered record to DB WITH the old valid hash. 
+            // This forces the auditor to detect the mismatch!
+            repository.save(target);
+            return true;
         } finally {
             lock.writeLock().unlock();
         }
@@ -161,31 +119,17 @@ public class Ledger {
     public void repairLedger() {
         lock.writeLock().lock();
         try {
-            loadLedgerFromFile(); // Fetches the untouched truth from disk
+            List<Transaction> transactions = getTransactions();
+            if (transactions.isEmpty()) return;
+            
+            Transaction target = transactions.get(transactions.size() - 1);
+            if (target.getCategory().startsWith("HACKED_")) {
+                // To repair the hack, we can delete the hacked row for demonstration
+                log.info("Repairing ledger by deleting hacked transaction: " + target.getId());
+                repository.delete(target);
+            }
         } finally {
             lock.writeLock().unlock();
-        }
-    }
-
-    private void loadLedgerFromFile() {
-        File file = new File(ledgerFilePath);
-        if (file.exists()) {
-            try {
-                List<Transaction> loaded = mapper.readValue(file, new TypeReference<>() {});
-                transactions.clear();
-                transactions.addAll(loaded);
-                System.out.println("Loaded " + transactions.size() + " transactions from " + ledgerFilePath);
-            } catch (IOException e) {
-                System.err.println("Error loading ledger: " + e.getMessage());
-            }
-        }
-    }
-
-    private void saveLedgerToFile() {
-        try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(ledgerFilePath), transactions);
-        } catch (IOException e) {
-            System.err.println("Error saving ledger: " + e.getMessage());
         }
     }
 }
