@@ -6,7 +6,8 @@
 target/
 
 # ── Ledger data files ─────────────────────────────────────
-ledger*.json
+# We comment this out so your initial local ledger is pushed to the server
+# ledger*.json
 
 # ── IDE & OS ──────────────────────────────────────────────
 .idea/
