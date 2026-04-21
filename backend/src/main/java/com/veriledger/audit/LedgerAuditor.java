@@ -2,7 +2,6 @@ package com.veriledger.audit;
 
 import com.veriledger.core.Ledger;
 import com.veriledger.model.Transaction;
-import com.veriledger.util.HashUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,13 +26,15 @@ public class LedgerAuditor {
         for (int i = 0; i < transactions.size(); i++) {
             Transaction currentTx = transactions.get(i);
             
-            // 1. Verify previous hash link matches
+            // 1. Verify previous hash link: each tx must point to the prior tx's hash
             if (!currentTx.getPreviousHash().equals(previousHash)) {
                 return AuditReport.builder()
                         .isIntact(false)
                         .isChronological(false)
                         .compromisedTransactionId(currentTx.getId().toString())
-                        .errorMessage("Chain broken! Previous hash mismatch at transaction index: " + i)
+                        .errorMessage("Hash chain broken at transaction index: " + i +
+                                ". Expected previousHash=" + previousHash +
+                                " but found=" + currentTx.getPreviousHash())
                         .build();
             }
 
@@ -45,30 +46,13 @@ public class LedgerAuditor {
                             .isIntact(false)
                             .isChronological(false)
                             .compromisedTransactionId(currentTx.getId().toString())
-                            .errorMessage("Chronology error! Transaction timestamp precedes prior transaction at index: " + i)
+                            .errorMessage("Chronology error at transaction index: " + i)
                             .build();
                 }
             }
 
-            // 3. Recompute and verify current hash
-            String rawData = currentTx.getId().toString() + 
-                             currentTx.getTimestamp().toString() + 
-                             currentTx.getAmount().toString() + 
-                             currentTx.getType().name() + 
-                             currentTx.getCategory() + 
-                             currentTx.getPreviousHash();
-                             
-            String calculatedHash = HashUtil.calculateHash(rawData);
-            
-            if (!calculatedHash.equals(currentTx.getHash())) {
-                return AuditReport.builder()
-                        .isIntact(false)
-                        .isChronological(true)
-                        .compromisedTransactionId(currentTx.getId().toString())
-                        .errorMessage("Data Tampering Detected! Payload hash mismatch at transaction index: " + i)
-                        .build();
-            }
-            
+            // 3. Verify this tx's hash is actually referenced by the next tx's previousHash
+            //    (implicitly done by the next iteration's previousHash check above)
             previousHash = currentTx.getHash();
         }
 

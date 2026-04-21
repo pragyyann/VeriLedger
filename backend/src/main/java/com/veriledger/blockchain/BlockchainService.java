@@ -140,7 +140,7 @@ public class BlockchainService {
     }
 
     public BlockchainVerificationResult verifyLedgerAgainstBlockchain(Ledger ledger) {
-        String localHash = ledger.calculateActualCurrentHash();
+        String localHash = ledger.computeCumulativeLedgerHash();
         String blockchainHash = fetchLedgerHashFromBlockchain();
         
         boolean isMatch = localHash.equals(blockchainHash);
