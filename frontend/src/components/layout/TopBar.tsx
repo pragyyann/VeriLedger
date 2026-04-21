@@ -58,9 +58,9 @@ export default function TopBar({ setRefreshTrigger }: { setRefreshTrigger: (fn: 
           </span>
         </Link>
 
-        {/* Centre: Spotlight Nav / Public Nav (Centred absolutely) */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-          {!isPublicRoute && user ? (
+        {/* Centre: Spotlight Nav (Centred absolutely) */}
+        {!isPublicRoute && user && (
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
             <SpotlightNav
               items={navItems}
               activeIndex={activeIndex}
@@ -69,14 +69,8 @@ export default function TopBar({ setRefreshTrigger }: { setRefreshTrigger: (fn: 
                 if (route) navigate(route);
               }}
             />
-          ) : (
-            /* Public nav links */
-            <nav className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
-              <a href="#features" className="text-gray-400 hover:text-white px-4 py-2 text-sm font-medium transition-colors">Features</a>
-              <Link to="/login" className="text-gray-400 hover:text-white px-4 py-2 text-sm font-medium transition-colors">Login</Link>
-            </nav>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Right: Wallet + Profile */}
         <div className="flex items-center gap-2 shrink-0">
@@ -137,10 +131,14 @@ export default function TopBar({ setRefreshTrigger }: { setRefreshTrigger: (fn: 
             </>
           ) : (
             <div className="hidden sm:flex items-center gap-3">
-              <Link to="/login" className="text-sm font-semibold text-white/70 hover:text-white px-3 transition-colors">
+              <a href="#features" className="text-sm font-semibold text-white/50 hover:text-white transition-colors">
+                Features
+              </a>
+              <div className="h-4 w-px bg-white/10 mx-1" />
+              <Link to="/login" className="text-sm font-semibold text-white/70 hover:text-white transition-colors">
                 Log in
               </Link>
-              <Link to="/login" className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:bg-gray-200 transition-colors">
+              <Link to="/login" className="rounded-full bg-white px-5 py-2 text-sm font-bold text-black hover:bg-gray-200 transition-all hover:scale-105 active:scale-95 duration-200 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                 Get Started
               </Link>
             </div>
