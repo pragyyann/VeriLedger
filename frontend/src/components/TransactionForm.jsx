@@ -106,7 +106,7 @@ export default function TransactionForm({ onTransactionAdded }) {
                     />
                 </div>
                 <div>
-                    <LiquidButton type="submit" disabled={loading} variant="default" size="default" className="w-full text-primary hover:text-white border border-primary/20 bg-primary/10 disabled:opacity-50">
+                    <LiquidButton type="submit" disabled={loading} variant="default" size="default" className="w-full text-primary hover:text-white border border-primary/20 bg-primary/10 disabled:opacity-50 rounded-full">
                         {loading ? <Loader2 className="animate-spin min-w-5 min-h-5" /> : (walletAddress ? "Sign & Add" : "Add to Ledger")}
                     </LiquidButton>
                 </div>

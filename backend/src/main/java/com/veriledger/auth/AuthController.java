@@ -25,6 +25,20 @@ public class AuthController {
     @Value("${google.client.id}")
     private String googleClientId;
 
+    private GoogleIdTokenVerifier verifier;
+
+    @jakarta.annotation.PostConstruct
+    public void init() {
+        try {
+            this.verifier = new GoogleIdTokenVerifier.Builder(
+                    new NetHttpTransport(), GsonFactory.getDefaultInstance())
+                    .setAudience(Collections.singletonList(googleClientId))
+                    .build();
+        } catch (Exception e) {
+            log.error("Failed to initialize GoogleIdTokenVerifier", e);
+        }
+    }
+
     @PostMapping("/google")
     public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> body) {
         String credential = body.get("credential");
@@ -33,11 +47,6 @@ public class AuthController {
         }
 
         try {
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
-                    new NetHttpTransport(), GsonFactory.getDefaultInstance())
-                    .setAudience(Collections.singletonList(googleClientId))
-                    .build();
-
             GoogleIdToken idToken = verifier.verify(credential);
             if (idToken == null) {
                 return ResponseEntity.status(401).body(Map.of("error", "Invalid Google token"));

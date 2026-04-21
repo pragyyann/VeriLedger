@@ -41,10 +41,10 @@ export default function BlockchainStatus() {
                     <Link2 className="text-primary" /> Ethereum Testnet Anchoring
                 </h2>
                 <div className="flex gap-2">
-                    <LiquidButton onClick={syncBlockchain} disabled={syncing} variant="outline" className="text-secondary border-secondary/50 bg-secondary/10 flex items-center gap-2">
+                    <LiquidButton onClick={syncBlockchain} disabled={syncing} variant="outline" className="text-secondary border border-secondary/50 bg-secondary/10 flex items-center gap-2 rounded-full">
                         <RefreshCw size={14} className={syncing ? "animate-spin" : ""} /> Sync
                     </LiquidButton>
-                    <LiquidButton onClick={checkBlockchain} disabled={loading} variant="default" className="text-white border border-primary/30 bg-primary/20">
+                    <LiquidButton onClick={checkBlockchain} disabled={loading} variant="default" className="text-white border border-primary/30 bg-primary/20 rounded-full">
                         Verify
                     </LiquidButton>
                 </div>

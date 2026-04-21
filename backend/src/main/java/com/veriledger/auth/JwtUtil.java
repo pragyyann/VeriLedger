@@ -17,8 +17,15 @@ public class JwtUtil {
 
     private static final long EXPIRY_MS = 7 * 24 * 60 * 60 * 1000L; // 7 days
 
+    private SecretKey cachedKey;
+
+    @jakarta.annotation.PostConstruct
+    public void init() {
+        this.cachedKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
+
     private SecretKey key() {
-        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        return cachedKey;
     }
 
     public String generateToken(String userId, String email, String name, String picture) {
