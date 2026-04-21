@@ -70,7 +70,7 @@ export const SpotlightNav: React.FC<SpotlightNavProps> = ({ items, activeIndex, 
       <div
         className="absolute top-0 h-[2px] bg-white transition-all duration-400 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-full"
         style={{
-          left: `${activeIndex * 64 + 16}px`,
+          left: `${activeIndex * 64 + 8}px`,
           width: '48px',
           transform: 'translateY(-1px)',
         }}

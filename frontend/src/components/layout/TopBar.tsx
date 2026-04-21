@@ -58,23 +58,25 @@ export default function TopBar({ setRefreshTrigger }: { setRefreshTrigger: (fn: 
           </span>
         </Link>
 
-        {/* Centre: Spotlight Nav (only logged-in internal pages) */}
-        {!isPublicRoute && user ? (
-          <SpotlightNav
-            items={navItems}
-            activeIndex={activeIndex}
-            onIndexChange={(i) => {
-              const route = NAV_ROUTES[i];
-              if (route) navigate(route);
-            }}
-          />
-        ) : (
-          /* Public nav links */
-          <nav className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
-            <a href="#features" className="text-gray-400 hover:text-white px-4 py-2 text-sm font-medium transition-colors">Features</a>
-            <Link to="/login" className="text-gray-400 hover:text-white px-4 py-2 text-sm font-medium transition-colors">Login</Link>
-          </nav>
-        )}
+        {/* Centre: Spotlight Nav / Public Nav (Centred absolutely) */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+          {!isPublicRoute && user ? (
+            <SpotlightNav
+              items={navItems}
+              activeIndex={activeIndex}
+              onIndexChange={(i) => {
+                const route = NAV_ROUTES[i];
+                if (route) navigate(route);
+              }}
+            />
+          ) : (
+            /* Public nav links */
+            <nav className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
+              <a href="#features" className="text-gray-400 hover:text-white px-4 py-2 text-sm font-medium transition-colors">Features</a>
+              <Link to="/login" className="text-gray-400 hover:text-white px-4 py-2 text-sm font-medium transition-colors">Login</Link>
+            </nav>
+          )}
+        </div>
 
         {/* Right: Wallet + Profile */}
         <div className="flex items-center gap-2 shrink-0">

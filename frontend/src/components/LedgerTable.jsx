@@ -125,7 +125,7 @@ export default function LedgerTable({ refreshTrigger }) {
                                 : transactions.length === 0
                                 ? (
                                     <tr>
-                                        <td colSpan="5" className="px-4 py-16 text-center">
+                                        <td colSpan="6" className="px-4 py-16 text-center">
                                             <div className="flex flex-col items-center gap-3 text-gray-500">
                                                 <Table className="w-10 h-10 opacity-20" />
                                                 <p className="text-sm italic">No transactions yet. Start by adding your first entry.</p>
