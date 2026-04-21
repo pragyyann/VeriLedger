@@ -42,8 +42,16 @@ export default function Dashboard({ refreshTrigger, onAnalyticsLoaded, onTransac
                         <img src={user.picture} alt={user.name} className="w-10 h-10 rounded-full border border-gray-700 shadow-sm" referrerPolicy="no-referrer" />
                     ) : null}
                     <div>
-                        <p className="text-gray-400 text-xs">Overview</p>
-                        <h2 className="text-white font-semibold text-lg tracking-tight hover:text-gray-200 transition-colors cursor-default">{user.name}'s Workspace</h2>
+                        <p className="text-gray-400 text-xs">
+                            {(() => {
+                                const hour = new Date().getHours();
+                                if (hour < 12) return 'Good morning';
+                                if (hour < 17) return 'Good afternoon';
+                                if (hour < 21) return 'Good evening';
+                                return 'Good night';
+                            })()}, {user.name.split(' ')[0]}
+                        </p>
+                        <h2 className="text-white font-semibold text-lg tracking-tight hover:text-gray-200 transition-colors cursor-default">Financial Workspace</h2>
                     </div>
                 </div>
             )}
